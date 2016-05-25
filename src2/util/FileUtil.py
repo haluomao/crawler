@@ -1,25 +1,33 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 import codecs
+import sys
+
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 class FileUtil:
 	'用与封装文件读写的类'
 	encode='utf-8';
-	def put(self, filePath, content):
+	@staticmethod 
+	def put(filePath, content):
 		with open(filePath, "w") as file:
 			file.write(content);
-
-	def append(self, filePath, content):
+			
+	@staticmethod 
+	def append(filePath, content):
 		with open(filePath, "a") as file:
 			file.write(content);
-
-	def appendline(self, filePath, content):
+	
+	@staticmethod 
+	def appendline(filePath, content):
 		with open(filePath, "a") as file:
 			file.write(content+"\n");
 
 	# 按行读
-	def readlines(self, filePath):
-		with codecs.open(filePath, "r", self.encode) as file:
+	@staticmethod 
+	def readlines(filePath):
+		with codecs.open(filePath, "r", FileUtil.encode) as file:
 			return file.readlines();
 
 	'''
@@ -27,19 +35,7 @@ class FileUtil:
 		print i;
 	'''
 
-	def read(self, filePath):
-		try:
-			file = codecs.open(filePath, "r", self.encode);
-			res = file.read();
-		finally:
-			if file:
-				file.close();
-			return res;
-
-def testFileUtil():
-	filePath='C:\Users\maofagui\Desktop\MailSender.java';
-	f=FileUtil();
-	print f.read(filePath);
-	#f.put(filePath+'0', 'Hello');
-
-#testFileUtil();
+	@staticmethod 
+	def read(filePath):
+		with codecs.open(filePath, "r", FileUtil.encode) as file:
+			return file.read()
