@@ -31,6 +31,17 @@ class HtmlUtil:
 		for ele in soup.select(expr):
 			res.append(ele.string);
 		return res;
+	
+	@staticmethod 
+	def select_all(content, expr):
+		soup = BeautifulSoup(content, from_encoding=HtmlUtil.encode)
+		res = [];
+		for ele in soup.select(expr):
+			if None==ele.string:
+				res.append(ele)
+			else:
+				res.append(ele.string)
+		return res;	
 		
 	#通过选择器获取<a>中的链接和内容
 	#usage：
@@ -48,12 +59,13 @@ class HtmlUtil:
 
 	#正则表达式或attr
 	# text=["Tillie", "Elsie", "Lacie"]	
-	def findAll(self, content, expr):
+	def findAll1(self, content, expr):
 		soup = BeautifulSoup(content, from_encoding=self.encode)
 		return soup.find_all(expr);
 		
 	#soup.find_all("a", class_="sister")
-	def findAll(self, content, expr1, expr2):
+	@staticmethod 
+	def findAll(content, expr1, expr2):
 		soup = BeautifulSoup(content, from_encoding=self.encode)
 		return soup.find_all(expr1, expr2);
 		

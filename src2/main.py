@@ -27,18 +27,17 @@ class PageCrawler:
 		page = FileUtil.read('2.txt')
 		#区域1
 		try:	
-			timeValue = HtmlUtil.select_v(page, '.time-source')
-			timeValue = StrUtil.trim(timeValue)
+			timeValue = HtmlUtil.select(page, '.time-source')
+			timeValue = StrUtil.trim(str(timeValue))
 			print timeValue
 			self.saveToFile(timeValue+"\n")
 		except:
 			msg= u"获取时间信息失败，你敢信？"
 			print msg
 			self.saveToFile(str(msg)+"\n")
-		
 		#区域2
 		try:
-			contentValue = HtmlUtil.select_vs(page, '#articleContent p')		
+			contentValue = HtmlUtil.select_all(page, '#articleContent p')		
 			for src in contentValue:
 				print src
 				self.saveToFile(str(src)+"\n")
@@ -52,6 +51,7 @@ class PageCrawler:
 		FileUtil.append(self.saveFile, value);
 		
 	def main(self):
+		FileUtil.put(self.saveFile, '');
 		url2 = 'http://finance.sina.com.cn/roll/2016-05-25/doc-ifxsqtya6053789.shtml'
 		self.getPageMore(url2)
 		

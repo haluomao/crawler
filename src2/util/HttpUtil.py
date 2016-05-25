@@ -33,7 +33,7 @@ class HttpUtil:
 		request = urllib2.Request(url, "", headers); 
 		try:
 			response = urllib2.urlopen(request);
-			return response.read()
+			return response.prettify()
 		except:
 			return HttpUtil.getPage2(url)
 		
@@ -49,10 +49,10 @@ class HttpUtil:
 		content = page.read()
 		try:
 			content = gzip.GzipFile('', 'rb', 9, StringIO.StringIO(content))
-			content = content.read()
+			content = content.prettify()
 		except:
 			content = StringIO.StringIO(zlib.decompress(content))
-			content = content.read()
+			content = content.prettify()
 		return content
 		
 if __name__=='__main__':
