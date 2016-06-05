@@ -11,8 +11,8 @@ debug=False
 Log = LogUtil('PageCrawler')
 
 class PageCrawler:
-	url = "http://roll.finance.sina.com.cn/finance/zq1/ssgs/index_1.shtml";
-	saveFile=TimeUtil.prefix()+".txt"	
+	url = 'http://finance.eastmoney.com/news/cssgs.html'
+	saveFile='data/finance_'+TimeUtil.prefix()+'_home.txt'	
 	
 	def getPage(self, url):
 		"获取第一页的内容，返回标题和url"
@@ -50,25 +50,53 @@ class PageCrawler:
 	def saveToFile(self, value):
 		FileUtil.append(self.saveFile, value);
 	
-	def getHomePage(self):
-		url = "http://roll.finance.sina.com.cn/finance/zq1/ssgs/index_1.shtml";
-		saveFile=TimeUtil.prefix()+"home.txt"
-		FileUtil.put(saveFile, '');	
-		res=getPage(url)
+	def getHomePage(self):				
+		FileUtil.put(self.saveFile, '');	
+		page = HttpUtil.getPage(self.url);
+		res = HtmlUtil.select_href_text(page, '.mainCont .listBox .list ul li a')
 		for (k,v) in res.items():
+			#print k+'|'+v
 			FileUtil.appendline(saveFile, k+'|'+v );
 			
 	def getDetailPage(self):
-		srcFile=TimeUtil.prefix()+".txt"
-		content=FileUtil.readlines(srcFile)
-		for str in content:
-			url=str.split('|')[1]
-			print url
-		
+		content=FileUtil.readlines(self.saveFile)
+		for s in content:
+			title=s.split('|')[0] #标题
+			url=s.split('|')[1]	#url
+			print url			
+			page = HttpUtil.getPage(url);
+			arr = HtmlUtil.select_all(page, '.newText .Info span')
+			date=''
+			source=''
+			#获取时间/来源
+			for k in arr:
+				if k is not None:
+					if "年" in str(k):
+						date=str(k);
+					if "来源" in str(k):
+						source=str(k);
+			content_review = HtmlUtil.select_v(page, '#ContentBody .c_review')
+			
+			if content_review is None:
+				content_review=''
+			arr = HtmlUtil.select_text(page, '#ContentBody p')
+			#记录到文件
+			newFile="data/finance"+url.split(',')[1][:-6]+".txt"
+			FileUtil.put(newFile, '')
+			FileUtil.appendline(newFile, title+"\n")
+			FileUtil.appendline(newFile, url)
+			FileUtil.appendline(newFile, date+"\n")
+			FileUtil.appendline(newFile, source+"\n")
+			FileUtil.appendline(newFile, content_review+"\n")
+			for k in arr:
+				try:
+					FileUtil.appendline(newFile, str(k))
+				except:
+					continue;
 		
 	def main(self):
 		#获取首页链接
-		#getHomePage()
+		#self.getHomePage()
 		#分析链接文件
 		self.getDetailPage()
 		

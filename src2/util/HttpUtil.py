@@ -33,7 +33,7 @@ class HttpUtil:
 		request = urllib2.Request(url, "", headers); 
 		try:
 			response = urllib2.urlopen(request);
-			return response.prettify()
+			return response.read()
 		except:
 			return HttpUtil.getPage2(url)
 		

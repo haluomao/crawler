@@ -11,17 +11,17 @@ class FileUtil:
 	encode='utf-8';
 	@staticmethod 
 	def put(filePath, content):
-		with open(filePath, "w") as file:
+		with codecs.open(filePath, "w", FileUtil.encode) as file:
 			file.write(content);
 			
 	@staticmethod 
 	def append(filePath, content):
-		with open(filePath, "a") as file:
+		with codecs.open(filePath, "a", FileUtil.encode) as file:
 			file.write(content);
 	
 	@staticmethod 
 	def appendline(filePath, content):
-		with open(filePath, "a") as file:
+		with codecs.open(filePath, "a", FileUtil.encode) as file:
 			file.write(content+"\n");
 
 	# 按行读
